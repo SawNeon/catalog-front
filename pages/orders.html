@@ -63,10 +63,15 @@
 
                 // Remover 'uploads/' da URL da imagem
                 let imageUrl = item.product.imgUrl;
-                imageUrl = imageUrl.replace('uploads/', '');  // Remove o prefixo 'uploads/'
+                imageUrl = imageUrl.replace('uploads/', '');
 
                 const productImage = document.createElement('img');
-                productImage.src = `http://localhost:8080/api/products/imgs/${imageUrl}`;  // Agora a URL está sem 'uploads/'
+                productImage.src = `http://localhost:8080/api/products/imgs/${imageUrl}`;
+
+                const productStock = document.createElement('p');
+                productStock.textContent = `Quantidade em estoque: ${item.product.productStock}`;
+                orderItem.appendChild(productStock);
+
                 productImage.alt = item.product.name;
                 productImage.width = 100;
                 orderItem.appendChild(productImage);

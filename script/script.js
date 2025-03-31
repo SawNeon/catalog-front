@@ -1,4 +1,4 @@
-// Função para exibir a imagem antes de enviar o formulário
+
 document.getElementById("img").addEventListener("change", function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -12,7 +12,7 @@ document.getElementById("img").addEventListener("change", function(event) {
 
 // Enviar o formulário para a API
 document.getElementById("productForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evitar envio padrão do formulário
+    event.preventDefault();
 
     const formData = new FormData();
     formData.append("name", document.getElementById("name").value);

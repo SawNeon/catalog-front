@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Produtos</title>
+    <link rel="stylesheet" href="/css/style.css">
+   <style>
+    .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content:space-around;
+        }
+
+        .product-item {
+            background-color: #fff;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+        }
+
+        .product-item img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 0px;
+        }
+
+        .product-item button {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .product-item button:hover {
+            background-color: #b0b300;
+        }
+   </style>
+</head>
+<body>
+
+    <h2>Catálogo de Produtos</h2>
+
+    <div class="product-list" id="productList">
+    </div>
+
+    <div class="cart-container">
+        <h3>Seu Pedido</h3>
+        <ul id="cartItems" class="cart-items">
+        </ul>
+
+        <label for="unidadeEscolar">Unidade Escolar:</label>
+        <input type="text" id="unidadeEscolar" placeholder="Digite a unidade escolar" required>
+
+        <button style="background-color: #007bff;" id="createOrderButton" onclick="createOrder()">Fazer Pedido</button>
+    </div>
+
+    <script src="/script/scriptOrder.js"></script>
+
+</body>
+</html>

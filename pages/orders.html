@@ -34,20 +34,17 @@
             const orderContainer = document.createElement('div');
             orderContainer.classList.add('order-container');
 
-            // Cria o título da unidade escolar que será clicável
             const orderTitle = document.createElement('h3');
             orderTitle.textContent = `Unidade Escolar: ${order.unidadeEscolar}`;
             orderContainer.appendChild(orderTitle);
 
-            // Cria o botão para mostrar/ocultar os itens do pedido
             const toggleButton = document.createElement('button');
             toggleButton.textContent = 'Mostrar Produtos';
             toggleButton.classList.add('toggle-button');
             orderContainer.appendChild(toggleButton);
 
-            // Cria a lista de itens do pedido, inicialmente escondida
             const orderItemsList = document.createElement('ul');
-            orderItemsList.style.display = 'none';  // Esconde a lista inicialmente
+            orderItemsList.style.display = 'none';
 
             order.orderItems.forEach(item => {
                 const orderItem = document.createElement('li');
@@ -61,7 +58,6 @@
                 productQuantity.textContent = `Quantidade: ${item.quantity}`;
                 orderItem.appendChild(productQuantity);
 
-                // Remover 'uploads/' da URL da imagem
                 let imageUrl = item.product.imgUrl;
                 imageUrl = imageUrl.replace('uploads/', '');
 
@@ -79,10 +75,8 @@
                 orderItemsList.appendChild(orderItem);
             });
 
-        // Adiciona a lista de itens ao container da unidade escolar
         orderContainer.appendChild(orderItemsList);
 
-        // Adiciona um evento para alternar a visibilidade da lista de produtos
         toggleButton.addEventListener('click', () => {
             if (orderItemsList.style.display === 'none') {
                 orderItemsList.style.display = 'block'; 

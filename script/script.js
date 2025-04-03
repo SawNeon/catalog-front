@@ -1,12 +1,13 @@
 function showProducts() {
     document.getElementById("productsContent").style.display = "block";
     document.getElementById("ordersContent").style.display = "none";
-    loadProducts(); 
+    loadProducts();
 }
 
 function showOrders() {
     document.getElementById("productsContent").style.display = "none";
     document.getElementById("ordersContent").style.display = "block";
+    fetchOrders();
 }
 
 function showAddProductForm() {
@@ -19,16 +20,15 @@ function cancelAddProductForm() {
     document.getElementById("productsContent").style.display = "block";
 }
 
-
 function loadProducts() {
     fetch("http://localhost:8080/api/products")
         .then(response => response.json())
         .then(products => {
-            const productList = document.getElementById('tableProduct');
-            productList.innerHTML = '';
+            const productList = document.getElementById("tableProduct");
+            productList.innerHTML = "";
 
             products.forEach(product => {
-                const productRow = document.createElement('div');
+                const productRow = document.createElement("div");
                 productRow.innerHTML = `
                     <p><strong>${product.name}</strong> - ${product.description} - Estoque: ${product.productStock}</p>
                     <button onclick="editProduct(${product.id})">Editar</button>
@@ -40,7 +40,7 @@ function loadProducts() {
         .catch(error => console.error("Erro ao carregar produtos:", error));
 }
 
-document.getElementById("productForm").addEventListener("submit", function(event) {
+document.getElementById("productForm").addEventListener("submit", function (event) {
     event.preventDefault();
 
     const formData = new FormData();
@@ -53,10 +53,80 @@ document.getElementById("productForm").addEventListener("submit", function(event
         method: "POST",
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        alert("Produto cadastrado com sucesso!");
-        showProducts();  
-    })
-    .catch(error => console.error("Erro ao cadastrar produto:", error));
+        .then(response => response.json())
+        .then(data => {
+            alert("Produto cadastrado com sucesso!");
+            showProducts();
+        })
+        .catch(error => console.error("Erro ao cadastrar produto:", error));
 });
+
+function fetchOrders() {
+    fetch("http://localhost:8080/api/orders")
+        .then(response => response.json())
+        .then(orders => {
+            displayOrders(orders);
+        })
+        .catch(error => {
+            console.error("Erro ao carregar pedidos:", error);
+        });
+}
+
+function displayOrders(orders) {
+    const ordersList = document.getElementById("ordersList");
+    ordersList.innerHTML = "";
+
+    orders.forEach(order => {
+        const orderContainer = document.createElement("div");
+        orderContainer.classList.add("order-container");
+
+        const orderTitle = document.createElement("h3");
+        orderTitle.textContent = `Unidade Escolar: ${order.unidadeEscolar}`;
+        orderContainer.appendChild(orderTitle);
+
+        const toggleButton = document.createElement("button");
+        toggleButton.textContent = "Mostrar Produtos";
+        toggleButton.classList.add("toggle-button");
+        orderContainer.appendChild(toggleButton);
+
+        const orderItemsList = document.createElement("ul");
+        orderItemsList.style.display = "none";
+
+        order.orderItems.forEach(item => {
+            const orderItem = document.createElement("li");
+            orderItem.classList.add("order-item");
+
+            const productName = document.createElement("p");
+            productName.textContent = `Produto: ${item.product.name}`;
+            orderItem.appendChild(productName);
+
+            const productQuantity = document.createElement("p");
+            productQuantity.textContent = `Quantidade: ${item.quantity}`;
+            orderItem.appendChild(productQuantity);
+
+            let imageUrl = item.product.imgUrl;
+            imageUrl = imageUrl.replace("uploads/", "");
+
+            const productImage = document.createElement("img");
+            productImage.src = `http://localhost:8080/api/products/imgs/${imageUrl}`;
+            productImage.alt = item.product.name;
+            productImage.width = 100;
+
+            const productStock = document.createElement("p");
+            productStock.textContent = `Quantidade em estoque: ${item.product.productStock}`;
+            orderItem.appendChild(productStock);
+            orderItem.appendChild(productImage);
+
+            orderItemsList.appendChild(orderItem);
+        });
+
+        toggleButton.addEventListener("click", () => {
+            const isHidden = orderItemsList.style.display === "none";
+            orderItemsList.style.display = isHidden ? "block" : "none";
+            toggleButton.textContent = isHidden ? "Ocultar Produtos" : "Mostrar Produtos";
+        });
+
+        orderContainer.appendChild(orderItemsList);
+        ordersList.appendChild(orderContainer);
+    });
+}

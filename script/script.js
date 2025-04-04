@@ -31,8 +31,8 @@ function loadProducts() {
                 const productRow = document.createElement("div");
                 productRow.innerHTML = `
                     <p><strong>${product.name}</strong> - ${product.description} - Estoque: ${product.productStock}</p>
-                    <button onclick="editProduct(${product.id})">Editar</button>
-                    <button onclick="deleteProduct(${product.id})">Excluir</button>
+                    <button class="button-white" onclick="editProduct(${product.id})">Editar</button>
+                    <button class="button-red" onclick="deleteProduct(${product.id})">Excluir</button>
                 `;
                 productList.appendChild(productRow);
             });

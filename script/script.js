@@ -86,8 +86,13 @@ function displayOrders(orders) {
 
         const toggleButton = document.createElement("button");
         toggleButton.textContent = "Mostrar Produtos";
-        toggleButton.classList.add("toggle-button");
+        toggleButton.classList.add("button");
         orderContainer.appendChild(toggleButton);
+
+        const aproveButton = document.createElement("button");
+        aproveButton.textContent = "aprovar";
+        aproveButton.classList.add("button");
+        orderContainer.appendChild(aproveButton);
 
         const orderItemsList = document.createElement("ul");
         orderItemsList.style.display = "none";
@@ -118,6 +123,7 @@ function displayOrders(orders) {
             orderItem.appendChild(productImage);
 
             orderItemsList.appendChild(orderItem);
+            
         });
 
         toggleButton.addEventListener("click", () => {

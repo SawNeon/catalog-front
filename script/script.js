@@ -81,7 +81,7 @@ function displayOrders(orders) {
         orderContainer.classList.add("order-container");
 
         const orderTitle = document.createElement("h3");
-        orderTitle.textContent = `Unidade Escolar: ${order.unidadeEscolar}`;
+        orderTitle.innerHTML = `Unidade Escolar: ${order.unidadeEscolar}<br>Status: ${order.status}`;
         orderContainer.appendChild(orderTitle);
 
         const toggleButton = document.createElement("button");
@@ -89,11 +89,34 @@ function displayOrders(orders) {
         toggleButton.classList.add("button");
         orderContainer.appendChild(toggleButton);
 
-        const approveButton = document.createElement("button");
-        approveButton.textContent = "aprovar";
-        approveButton.classList.add("button");
-        orderContainer.appendChild(approveButton);
-
+        if (order.status !== "APROVADO") {
+            const approveButton = document.createElement("button");
+            approveButton.textContent = "aprovar";
+            approveButton.classList.add("button");
+            orderContainer.appendChild(approveButton);
+            
+            approveButton.addEventListener("click", () => {
+                fetch(`http://localhost:8080/api/orders/approve/${order.id}`, {
+                    method: "POST"
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao aprovar o pedido.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Pedido aprovado com sucesso", data);
+                    approveButton.disabled = true;
+                    approveButton.textContent = "Aprovado";
+                    approveButton.classList.add("aprovado");
+                })
+                .catch(error => {
+                    console.error("Erro ao aprovar o pedido: ", error);
+                    alert("Não foi possível aprovar o pedido.");
+                });
+            });
+        }
         const orderItemsList = document.createElement("ul");
         orderItemsList.style.display = "none";
 
@@ -131,29 +154,6 @@ function displayOrders(orders) {
             orderItemsList.style.display = isHidden ? "block" : "none";
             toggleButton.textContent = isHidden ? "Ocultar Produtos" : "Mostrar Produtos";
         });
-
-        approveButton.addEventListener("click", () =>{
-            fetch(`http://localhost:8080/api/orders/approve/${order.id}`,{
-                method: "POST"
-            })
-            .then(response => {
-                if(!response.ok){
-                    throw new Error("Error approve the order.");
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("successful order approved", data);
-                approveButton.disabled = true;
-                approveButton.textContent = "Approved";
-                approveButton.classList.add("aprovado");
-            })
-            .catch(error => {
-                console.error("Error approve the order: ", error);
-                alert("Não foi possível aprovar o pedido.");
-            })
-
-        })
 
         orderContainer.appendChild(orderItemsList);
         ordersList.appendChild(orderContainer);

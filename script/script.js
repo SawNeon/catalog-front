@@ -19,6 +19,13 @@ function cancelAddProductForm() {
     document.getElementById("addProductForm").style.display = "none";
     document.getElementById("productsContent").style.display = "block";
 }
+function editProduct(){
+    document.getElementById("updateProductForm").style.display = "block";
+}
+
+function cancelUpdateProduct(){
+    document.getElementById("updateProductForm").style.display = "none";
+}
 
 function loadProducts() {
     fetch("http://localhost:8080/api/products")
@@ -94,7 +101,7 @@ function displayOrders(orders) {
             approveButton.textContent = "aprovar";
             approveButton.classList.add("button");
             orderContainer.appendChild(approveButton);
-            
+
             approveButton.addEventListener("click", () => {
                 fetch(`http://localhost:8080/api/orders/approve/${order.id}`, {
                     method: "POST"
@@ -157,5 +164,70 @@ function displayOrders(orders) {
 
         orderContainer.appendChild(orderItemsList);
         ordersList.appendChild(orderContainer);
+    });
+}
+
+let editingProductId = null;
+
+function editProduct(id) {
+    fetch(`http://localhost:8080/api/products/${id}`)
+        .then(response => response.json())
+        .then(product => {
+            editingProductId = id;
+            document.getElementById("editName").value = product.name;
+            document.getElementById("editProductStock").value = product.productStock;
+            document.getElementById("editDescription").value = product.description;
+            document.getElementById("updateProductForm").style.display = "block";
+        })
+        .catch(error => console.error("Erro ao carregar produto:", error));
+}
+
+document.getElementById("formEditProduct").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", document.getElementById("editName").value);
+    formData.append("description", document.getElementById("editDescription").value);
+    formData.append("productStock", document.getElementById("editProductStock").value);
+
+    const img = document.getElementById("editImg").files[0];
+    if (img) formData.append("img", img);
+
+    fetch(`http://localhost:8080/api/products/${editingProductId}`, {
+        method: "PUT",
+        body: formData
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Erro ao atualizar produto");
+            return response.json();
+        })
+        .then(() => {
+            alert("Produto atualizado com sucesso!");
+            document.getElementById("updateProductForm").style.display = "none";
+            loadProducts();
+        })
+        .catch(error => {
+            console.error("Erro ao atualizar produto:", error);
+        });
+});
+
+function deleteProduct(id) {
+    const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
+    if (!confirmDelete) return;
+
+    fetch(`http://localhost:8080/api/products/${id}`, {
+        method: "DELETE"
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Produto excluído com sucesso!");
+            loadProducts();
+        } else {
+            throw new Error("Error delete product.");
+        }
+    })
+    .catch(error => {
+        console.error("Error Delete product:", error);
+        alert("Não foi possível excluir o produto.");
     });
 }

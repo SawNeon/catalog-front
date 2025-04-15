@@ -50,7 +50,7 @@
 
                 <div id="tableProduct"></div>
 
-                <!-- Formulário para Cadastrar Produto -->
+                <!-- Forms create new product -->
                 <div class="details" id="addProductForm" style="display: none;">
                     <div class="cardHeader">
                         <h2>Cadastrar produto</h2>
@@ -65,6 +65,21 @@
                     </form>
                 </div>
             </div>
+                <!-- Forms Update product -->
+                <div class="details" id="updateProductForm" style="display: none;">
+                    <div class="cardHeader">
+                        <h2>Editar Produto</h2>
+                    </div>
+                    <form id="formEditProduct">
+                        <input type="text" id="editName" placeholder="Nome do Produto" required><br><br>
+                        <input type="number" id="editProductStock" placeholder="Quantidade" required><br><br>
+                        <input type="file" id="editImg"><br><br>
+                        <textarea id="editDescription" placeholder="Descrição" required></textarea><br><br>
+                        <button class="button" type="submit">Confirmar</button>
+                        <button class="button-red" type="button" onclick="cancelUpdateProduct()">Cancelar</button>
+                    </form>
+                </div>
+
             <div class="details" id="productsEdit" style="display: none;">
                 <button class= "button" onclick="showAddProductForm()" style="display: flex; justify-content: end;">Editar Produto</button>
 

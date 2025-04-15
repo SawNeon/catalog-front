@@ -25,15 +25,7 @@
             </ul>
         </div>
 
-        <div class = "firt" style="display: block;">
-            <h1 class="firtText"
-            style="display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;">
-            Sistema desenvolvido por Estágiario
-            </h1>
-        </div>
+        
 
 
         <!-- ========================= Main ==================== -->
@@ -51,6 +43,30 @@
             <!-- ================== Products Section ================== -->
             <div class="details" id="productsContent" style="display: none;">
                 <button class= "button" onclick="showAddProductForm()" style="display: flex; justify-content: end;">Novo Produto</button>
+
+                <div class="cardHeader">
+                    <h2>Produtos</h2>
+                </div>
+
+                <div id="tableProduct"></div>
+
+                <!-- Formulário para Cadastrar Produto -->
+                <div class="details" id="addProductForm" style="display: none;">
+                    <div class="cardHeader">
+                        <h2>Cadastrar produto</h2>
+                    </div>
+                    <form id="productForm">
+                        <input type="text" id="name" placeholder="Nome do Produto" required><br><br>
+                        <input type="number" id="productStock" placeholder="Quantidade" required><br><br>
+                        <input type="file" id="img" required><br><br>
+                        <textarea id="description" placeholder="Descrição" required></textarea><br><br>
+                        <button type="submit">Cadastrar Produto</button>
+                        <button class = "button-red" type="button" onclick="cancelAddProductForm()">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="details" id="productsEdit" style="display: none;">
+                <button class= "button" onclick="showAddProductForm()" style="display: flex; justify-content: end;">Editar Produto</button>
 
                 <div class="cardHeader">
                     <h2>Produtos</h2>

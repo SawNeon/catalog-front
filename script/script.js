@@ -28,7 +28,7 @@ function cancelUpdateProduct(){
 }
 
 function loadProducts() {
-    fetch("http://localhost:8080/api/products")
+    fetch("http://192.168.37.36:8080/api/products")
         .then(response => response.json())
         .then(products => {
             const productList = document.getElementById("tableProduct");
@@ -56,7 +56,7 @@ document.getElementById("productForm").addEventListener("submit", function (even
     formData.append("productStock", document.getElementById("productStock").value);
     formData.append("img", document.getElementById("img").files[0]);
 
-    fetch("http://localhost:8080/api/products", {
+    fetch("http://192.168.37.36:8080/api/products", {
         method: "POST",
         body: formData
     })
@@ -69,7 +69,7 @@ document.getElementById("productForm").addEventListener("submit", function (even
 });
 
 function fetchOrders() {
-    fetch("http://localhost:8080/api/orders")
+    fetch("http://192.168.37.36:8080/api/orders")
         .then(response => response.json())
         .then(orders => {
             displayOrders(orders);
@@ -103,7 +103,7 @@ function displayOrders(orders) {
             orderContainer.appendChild(approveButton);
 
             approveButton.addEventListener("click", () => {
-                fetch(`http://localhost:8080/api/orders/approve/${order.id}`, {
+                fetch(`http://192.168.37.36:8080/api/orders/approve/${order.id}`, {
                     method: "POST"
                 })
                 .then(response => {
@@ -143,7 +143,7 @@ function displayOrders(orders) {
             imageUrl = imageUrl.replace("uploads/", "");
 
             const productImage = document.createElement("img");
-            productImage.src = `http://localhost:8080/api/products/imgs/${imageUrl}`;
+            productImage.src = `http://192.168.37.36:8080/api/products/imgs/${imageUrl}`;
             productImage.alt = item.product.name;
             productImage.width = 100;
 
@@ -170,7 +170,7 @@ function displayOrders(orders) {
 let editingProductId = null;
 
 function editProduct(id) {
-    fetch(`http://localhost:8080/api/products/${id}`)
+    fetch(`http://192.168.37.36:8080/api/products/${id}`)
         .then(response => response.json())
         .then(product => {
             editingProductId = id;
@@ -193,7 +193,7 @@ document.getElementById("formEditProduct").addEventListener("submit", function (
     const img = document.getElementById("editImg").files[0];
     if (img) formData.append("img", img);
 
-    fetch(`http://localhost:8080/api/products/${editingProductId}`, {
+    fetch(`http://192.168.37.36:8080/api/products/${editingProductId}`, {
         method: "PUT",
         body: formData
     })
@@ -215,7 +215,7 @@ function deleteProduct(id) {
     const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
     if (!confirmDelete) return;
 
-    fetch(`http://localhost:8080/api/products/${id}`, {
+    fetch(`http://192.168.37.36:8080/api/products/${id}`, {
         method: "DELETE"
     })
     .then(response => {

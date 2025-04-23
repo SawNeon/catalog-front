@@ -1,7 +1,7 @@
 let cartItems = [];
 
 function fetchProducts() {
-    fetch('http://localhost:8080/api/products')
+    fetch('http://192.168.37.36:8080/api/products')
         .then(response => response.json())
         .then(products => {
             displayProducts(products);
@@ -25,7 +25,7 @@ function displayProducts(products) {
             imageUrl = imageUrl.replace('uploads/', '');
         }
 
-        const fullImageUrl = `http://localhost:8080/api/products/imgs/${imageUrl}`;
+        const fullImageUrl = `http://192.168.37.36:8080/api/products/imgs/${imageUrl}`;
         console.log('URL da Imagem:', fullImageUrl);
 
         productItem.innerHTML = `
@@ -90,7 +90,7 @@ function createOrder() {
         total: cartItems.reduce((total, item) => total + (item.productPrice * item.quantity), 0)  // 
     };
 
-    fetch('http://localhost:8080/api/orders', {
+    fetch('http://192.168.37.36:8080/api/orders', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

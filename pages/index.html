@@ -42,11 +42,16 @@
 
             <!-- ================== Products Section ================== -->
             <div class="details" id="productsContent" style="display: none;">
-                <button class= "button" onclick="showAddProductForm()" style="display: flex; justify-content: end;">Novo Produto</button>
-
-                <div class="cardHeader">
-                    <h2>Produtos</h2>
+                
+                <div class="header-actions">
+                    <div class="cardHeader">
+                        <h2>Produtos</h2>
+                    </div>
+                    <div class="button-container-right">
+                        <button class="button" id="buttonAddProduct" onclick="showAddProductForm()">Novo Produto</button>
+                    </div>
                 </div>
+                
 
                 <div id="tableProduct"></div>
 

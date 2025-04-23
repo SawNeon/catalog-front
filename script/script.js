@@ -27,25 +27,89 @@ function cancelUpdateProduct(){
     document.getElementById("updateProductForm").style.display = "none";
 }
 
+let allProducts = [];
+let currentPage = 1;
+const itemsPerPage = 10;
+
 function loadProducts() {
     fetch("http://192.168.37.36:8080/api/products")
         .then(response => response.json())
         .then(products => {
-            const productList = document.getElementById("tableProduct");
-            productList.innerHTML = "";
-
-            products.forEach(product => {
-                const productRow = document.createElement("div");
-                productRow.innerHTML = `
-                    <p><strong>${product.name}</strong> - ${product.description} - Estoque: ${product.productStock}</p>
-                    <button class="button-white" onclick="editProduct(${product.id})">Editar</button>
-                    <button class="button-red" onclick="deleteProduct(${product.id})">Excluir</button>
-                `;
-                productList.appendChild(productRow);
-            });
+            allProducts = products;
+            currentPage = 1;
+            renderProductTable();
         })
         .catch(error => console.error("Erro ao carregar produtos:", error));
 }
+
+function renderProductTable() {
+    const productList = document.getElementById("tableProduct");
+    productList.innerHTML = "";
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedProducts = allProducts.slice(start, end);
+
+    let tableHTML = `
+        <table class="productTable">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Estoque</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${paginatedProducts.map(product => `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${product.description}</td>
+                        <td>${product.productStock}</td>
+                        <td>
+                            <button class="button-white" onclick="editProduct(${product.id})">Editar</button>
+                            <button class="button-red" onclick="deleteProduct(${product.id})">Excluir</button>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        <div id="paginationControls" style="text-align:center; margin-top: 15px;"></div>
+    `;
+
+    productList.innerHTML = tableHTML;
+
+    renderPaginationControls();
+}
+
+function renderPaginationControls() {
+    const totalPages = Math.ceil(allProducts.length / itemsPerPage);
+    const controls = document.getElementById("paginationControls");
+
+    let paginationHTML = "";
+
+    if (currentPage > 1) {
+        paginationHTML += `<button class="button" onclick="changePage(${currentPage - 1})">Anterior</button>`;
+    } else {
+        paginationHTML += `<button class="button" disabled>Anterior</button>`;
+    }
+
+    paginationHTML += `<span style="margin: 0 10px;">Página ${currentPage} de ${totalPages}</span>`;
+
+    if (currentPage < totalPages) {
+        paginationHTML += `<button class="button" onclick="changePage(${currentPage + 1})">Próximo</button>`;
+    } else {
+        paginationHTML += `<button class="button" disabled>Próximo</button>`;
+    }
+
+    controls.innerHTML = paginationHTML;
+}
+
+function changePage(newPage) {
+    currentPage = newPage;
+    renderProductTable();
+}
+
 
 document.getElementById("productForm").addEventListener("submit", function (event) {
     event.preventDefault();

@@ -192,7 +192,31 @@ body {
   font-size: 1.2rem;
 }
 
+.button-container-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;           
+  margin-bottom: 10px;            
+}
+
 #updateProductForm {
+  position: absolute;
+  right: 20px;
+  top: 100px;
+  width: 300px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  z-index: 100;
+}
+#addProductForm {
   position: absolute;
   right: 20px;
   top: 100px;
@@ -516,6 +540,10 @@ body {
 
 .footer-nav {
   margin-top: 10px;
+  display: flex;           
+  align-items: center;         
+  justify-content: center;     
+  gap: 20px;  
 }
 
 .footer-nav a {
@@ -526,5 +554,27 @@ body {
 
 .footer-nav a:hover {
   text-decoration: underline;
+}
+
+.productTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.productTable th {
+  background-color: var(--black1);
+  color: var(--white);
+  padding: 10px;
+  text-align: left;
+}
+
+.productTable td {
+  padding: 10px;
+  border-bottom: 1px solid var(--black2);
+}
+
+.productTable tbody tr:hover {
+  background-color: var(--gray);
 }
 

@@ -143,93 +143,109 @@ function fetchOrders() {
         });
 }
 
+let loadedOrders = [];
+
 function displayOrders(orders) {
+    loadedOrders = orders; // GARANTE que loadedOrders é atualizado!
+
     const ordersList = document.getElementById("ordersList");
-    ordersList.innerHTML = "";
+    ordersList.innerHTML = `
+        <table class="productTable">
+            <thead>
+                <tr>
+                    <th>Unidade Escolar</th>
+                    <th>Status</th>
+                    <th>Produtos</th>
+                    <th>Aprovação</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${orders.map(order => `
+                    <tr>
+                        <td>${order.unidadeEscolar}</td>
+                        <td>${order.status}</td>
+                        <td>
+                            <button class="button" onclick="toggleOrderProducts(${order.id})" id="toggleButton_${order.id}">
+                                Mostrar Produtos
+                            </button>
+                            <div id="orderItems_${order.id}" class="order-items-container" style="display:none; margin-top: 10px;"></div>
+                        </td>
+                        <td>
+                            ${order.status !== "APROVADO" 
+                                ? `<button class="button" onclick="approveOrder(${order.id})" id="approveButton_${order.id}">Aprovar</button>` 
+                                : `<span class="aprovado">Aprovado</span>`}
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
 
-    orders.forEach(order => {
-        const orderContainer = document.createElement("div");
-        orderContainer.classList.add("order-container");
+function toggleOrderProducts(orderId) {
+    const order = findOrderById(orderId);
 
-        const orderTitle = document.createElement("h3");
-        orderTitle.innerHTML = `Unidade Escolar: ${order.unidadeEscolar}<br>Status: ${order.status}`;
-        orderContainer.appendChild(orderTitle);
+    if (!order) {
+        alert("Pedido não encontrado! Atualize a página.");
+        return;
+    }
 
-        const toggleButton = document.createElement("button");
+    const orderItemsDiv = document.getElementById(`orderItems_${orderId}`);
+    const toggleButton = document.getElementById(`toggleButton_${orderId}`);
+
+    if (!orderItemsDiv) {
+        console.error(`Div de produtos (orderItems_${orderId}) não encontrada!`);
+        return;
+    }
+
+    if (orderItemsDiv.style.display === "none") {
+        orderItemsDiv.style.display = "block";
+        toggleButton.textContent = "Ocultar Produtos";
+
+        orderItemsDiv.innerHTML = order.orderItems.length > 0 ? order.orderItems.map(item => `
+            <div style="margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
+                <p>Produto: ${item.product.name}</p>
+                <p>Quantidade: ${item.quantity}</p>
+                <p>Estoque: ${item.product.productStock}</p>
+                ${item.product.imgUrl 
+                    ? `<img src="http://192.168.37.36:8080/api/products/imgs/${item.product.imgUrl.replace('uploads/', '')}" 
+                         alt="${item.product.name}" width="100">` 
+                    : `<p>Imagem não disponível</p>`}
+            </div>
+        `).join('') : `<p>Este pedido não possui produtos.</p>`;
+    } else {
+        orderItemsDiv.style.display = "none";
         toggleButton.textContent = "Mostrar Produtos";
-        toggleButton.classList.add("button");
-        orderContainer.appendChild(toggleButton);
+    }
+}
 
-        if (order.status !== "APROVADO") {
-            const approveButton = document.createElement("button");
-            approveButton.textContent = "aprovar";
-            approveButton.classList.add("button");
-            orderContainer.appendChild(approveButton);
 
-            approveButton.addEventListener("click", () => {
-                fetch(`http://192.168.37.36:8080/api/orders/approve/${order.id}`, {
-                    method: "POST"
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Erro ao aprovar o pedido.");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Pedido aprovado com sucesso", data);
-                    approveButton.disabled = true;
-                    approveButton.textContent = "Aprovado";
-                    approveButton.classList.add("aprovado");
-                })
-                .catch(error => {
-                    console.error("Erro ao aprovar o pedido: ", error);
-                    alert("Não foi possível aprovar o pedido.");
-                });
-            });
+function findOrderById(orderId) {
+    return loadedOrders.find(order => order.id === orderId);
+}
+
+function approveOrder(orderId) {
+    const approveButton = document.getElementById(`approveButton_${orderId}`);
+    
+    fetch(`http://192.168.37.36:8080/api/orders/approve/${orderId}`, {
+        method: "POST"
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao aprovar o pedido.");
         }
-        const orderItemsList = document.createElement("ul");
-        orderItemsList.style.display = "none";
-
-        order.orderItems.forEach(item => {
-            const orderItem = document.createElement("li");
-            orderItem.classList.add("order-item");
-
-            const productName = document.createElement("p");
-            productName.textContent = `Produto: ${item.product.name}`;
-            orderItem.appendChild(productName);
-
-            const productQuantity = document.createElement("p");
-            productQuantity.textContent = `Quantidade: ${item.quantity}`;
-            orderItem.appendChild(productQuantity);
-
-            let imageUrl = item.product.imgUrl;
-            imageUrl = imageUrl.replace("uploads/", "");
-
-            const productImage = document.createElement("img");
-            productImage.src = `http://192.168.37.36:8080/api/products/imgs/${imageUrl}`;
-            productImage.alt = item.product.name;
-            productImage.width = 100;
-
-            const productStock = document.createElement("p");
-            productStock.textContent = `Quantidade em estoque: ${item.product.productStock}`;
-            orderItem.appendChild(productStock);
-            orderItem.appendChild(productImage);
-
-            orderItemsList.appendChild(orderItem);
-            
-        });
-
-        toggleButton.addEventListener("click", () => {
-            const isHidden = orderItemsList.style.display === "none";
-            orderItemsList.style.display = isHidden ? "block" : "none";
-            toggleButton.textContent = isHidden ? "Ocultar Produtos" : "Mostrar Produtos";
-        });
-
-        orderContainer.appendChild(orderItemsList);
-        ordersList.appendChild(orderContainer);
+        return response.json();
+    })
+    .then(() => {
+        alert("Pedido aprovado com sucesso!");
+        fetchOrders();
+    })
+    .catch(error => {
+        console.error("Erro ao aprovar o pedido: ", error);
+        alert("Não foi possível aprovar o pedido.");
     });
 }
+
 
 let editingProductId = null;
 

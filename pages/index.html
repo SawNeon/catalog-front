@@ -1,140 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Administrativo</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/styleLogin.css">
+    <link rel="script" href="/script/scriptLogin.js">
 </head>
-
 <body>
-    <!-- =============== Navigation ================ -->
-    <div class="container">
-        <div class="navigation">
-            <ul>
-                <li>
-                    <a href="#" onclick="showProducts();">
-                        <span class="title">Sistema de Cadastro</span>
-                    </a>
-                </li>
 
-                <li><a href="#" onclick="showProducts();"><span class="title">Produtos</span></a></li>
-                <li><a href="#" onclick="showOrders();"><span class="title">Pedidos</span></a></li>
-            </ul>
-        </div>
+    <div class="main">  	
+		<input type="checkbox" id="chk" aria-hidden="true">
 
-        
+			<div class="signup">
+				<form>
+					<label for="chk" aria-hidden="true">Catalogo</label>
 
+					<a href="pedidos.html">Entrar</a>
 
-        <!-- ========================= Main ==================== -->
-        <div class="main">
-            <div class="topbar">
-                <div class="toggle" onclick="toggleMenu();"></div>
-                <div class="search">
-                    <label>
-                        <input type="text" placeholder="Pesquisar Produto..." id="searchInput"
-                            oninput="searchProduct()">
-                    </label>
-                </div>
-            </div>
+				</form>
+			</div>
 
-            <!-- ================== Products Section ================== -->
-            <div class="details" id="productsContent" style="display: none;">
-                
-                <div class="header-actions">
-                    <div class="cardHeader">
-                        <h2>Produtos</h2>
-                    </div>
-                    <div class="button-container-right">
-                        <button class="button" id="buttonAddProduct" onclick="showAddProductForm()">Novo Produto</button>
-                    </div>
-                </div>
-                
-
-                <div id="tableProduct"></div>
-
-                <!-- Forms create new product -->
-                <div class="details" id="addProductForm" style="display: none;">
-                    <div class="cardHeader">
-                        <h2>Cadastrar produto</h2>
-                    </div>
-                    <form id="productForm">
-                        <input type="text" id="name" placeholder="Nome do Produto" required><br><br>
-                        <input type="number" id="productStock" placeholder="Quantidade" required><br><br>
-                        <input type="file" id="img" required><br><br>
-                        <textarea id="description" placeholder="Descrição" required></textarea><br><br>
-                        <button type="submit">Cadastrar Produto</button>
-                        <button class = "button-red" type="button" onclick="cancelAddProductForm()">Cancelar</button>
-                    </form>
-                </div>
-            </div>
-                <!-- Forms Update product -->
-                <div class="details" id="updateProductForm" style="display: none;">
-                    <div class="cardHeader">
-                        <h2>Editar Produto</h2>
-                    </div>
-                    <form id="formEditProduct">
-                        <input type="text" id="editName" placeholder="Nome do Produto" required><br><br>
-                        <input type="number" id="editProductStock" placeholder="Quantidade" required><br><br>
-                        <input type="file" id="editImg"><br><br>
-                        <textarea id="editDescription" placeholder="Descrição" required></textarea><br><br>
-                        <button class="button" type="submit">Confirmar</button>
-                        <button class="button-red" type="button" onclick="cancelUpdateProduct()">Cancelar</button>
-                    </form>
-                </div>
-
-            <div class="details" id="productsEdit" style="display: none;">
-                <button class= "button" onclick="showAddProductForm()" style="display: flex; justify-content: end;">Editar Produto</button>
-
-                <div class="cardHeader">
-                    <h2>Produtos</h2>
-                </div>
-
-                <div id="tableProduct"></div>
-
-                <!-- Formulário para Cadastrar Produto -->
-                <div class="details" id="addProductForm" style="display: none;">
-                    <div class="cardHeader">
-                        <h2>Cadastrar produto</h2>
-                    </div>
-                    <form id="productForm">
-                        <input type="text" id="name" placeholder="Nome do Produto" required><br><br>
-                        <input type="number" id="productStock" placeholder="Quantidade" required><br><br>
-                        <input type="file" id="img" required><br><br>
-                        <textarea id="description" placeholder="Descrição" required></textarea><br><br>
-                        <button type="submit">Cadastrar Produto</button>
-                        <button class = "button-red" type="button" onclick="cancelAddProductForm()">Cancelar</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- ================== Orders Section ================== -->
-            <div class="details" id="ordersContent" style="display: none;">
-                <div class="cardHeader">
-                    <h2>Pedidos</h2>
-                </div>
-                <div id="ordersList"></div>
-            </div>
-
-        </div>
-
-    </div>
-
- </div>
-
- <footer class="footer">
-    <div class="footer-content">
-        <p>&copy; Copyright estagiario Matheus 2025. Todos os direitos reservados</p>
-        <nav class="footer-nav">
-            <a href="https://www.varginha.mg.gov.br">Prefeitura</a>
-            <p>Contato: (35) 3690-2057</p>
-        </nav>
-    </div>
-</footer>
-
-    <script src="/script/script.js"></script>
+			<div class="login">
+				<form id="loginForm">
+					<label for="chk" aria-hidden="true">Admin</label>
+					<input type="text" id="user" name="user" placeholder="Usuário" required="">
+					<input type="password" id="pswd" name="pswd" placeholder="Senha" required="">
+					<button type="submit">Entrar</button>
+				</form>
+			</div>
+	</div>
+    
+    
+        <script src="/script/scriptLogin.js"></script>
 </body>
-
 </html>
